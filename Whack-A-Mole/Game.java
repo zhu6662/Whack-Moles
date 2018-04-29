@@ -17,14 +17,15 @@ import java.util.*;
 public class Game extends JFrame implements ActionListener{
     public static String[] animals = {"Human","Wolf","Coyote", "Highland Cattle", "Dolphin", "Arctic Fox", "Tiger", "Rabbit", "King Cobra", "Dog"};
     public static String[] bioNames = {"Homo Sapiens","Canis Rufus","Canius Latrans", "Bos Taurus", "Delphinus Delphis", "Alopex Lagopus", "Panthera Tigris","Oryctolagus cuniculus","Ophiophagus hannah","Canis Lupus Familiaris"};
-    
-    private static final int MAX_CREATURES = 4; //stores the max number of active creatures 
+    private static int currentIndex;
+    private static JButton middle;
+    private static final int MAX_CREATURES = 7; //stores the max number of active creatures 
     private static final String SCORE_PREFIX = "Score: "; 
     private static final String TIME_PREFIX = "Time: "; 
-    private static final double LENGTH_OF_GAME = .25*40000; //stores the length of the game in milliseconds
+    private static final double LENGTH_OF_GAME = .25*100000; //stores the length of the game in milliseconds
     private static final int TARGET_SCORE = 250; //stores the score the player must get to beat the level 
     private static Random rand = new Random(); 
-    private static  int numOfCreatures = 9; //stores the number of creatures, varies with the level the player is currently on 
+    private static  int numOfCreatures = 25; //stores the number of creatures, varies with the level the player is currently on 
     static int score; //store the numerical score of the game 
     static JLabel scoreLabel; //displays the score of the game
     static JLabel timeLabel; //displays the time left in the game
@@ -94,10 +95,15 @@ public class Game extends JFrame implements ActionListener{
         scoreLabel.setText(SCORE_PREFIX + score);   
     }
     
+    public static void minus_score() {
+        score -= 10;
+        scoreLabel.setText(SCORE_PREFIX + score);   
+    }
+    
     public Game() {
         
         //set JFrames size, layout, close operation, and title 
-        setSize(500, 500); 
+        setSize(1000, 1000); 
         setLayout(new BorderLayout()); 
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setTitle("Whack-a-Mole"); 
@@ -105,6 +111,10 @@ public class Game extends JFrame implements ActionListener{
         //set score and creatures alive to 0 for the current game/level 
         score = 0; 
         creaturesAlive = 0; 
+        
+        
+        currentIndex = rand.nextInt(10);
+        middle = new JButton(bioNames[currentIndex]);
         
         //Initialize and add top of the screen 
         JPanel top = intitialize_top(); 
@@ -124,12 +134,12 @@ public class Game extends JFrame implements ActionListener{
     private JPanel intitialize_field() {
         //create field panel and set up grid layout 
         JPanel field = new JPanel(); 
-        field.setLayout(new GridLayout(4,3, 5, 5)); 
+        field.setLayout(new GridLayout(5,5, 5, 5)); 
         //Initialize creatures array 
         creatures = new Creature[numOfCreatures]; 
         for(int x = 0; x < creatures.length; x++) {
-            if(x == 4){
-                field.add(new JButton("asdf"));
+            if(x == 12){
+                field.add(middle);
                 creatures[x] = new Creature();
             }else{
                 creatures[x] = new Creature();
@@ -151,7 +161,7 @@ public class Game extends JFrame implements ActionListener{
         //Initialize and add score and time label to JPanel 
         scoreLabel = new JLabel(); 
         timeLabel = new JLabel(); 
-        scoreLabel.setText(SCORE_PREFIX);
+        scoreLabel.setText(SCORE_PREFIX + score);
         timeLabel.setText(TIME_PREFIX);
         top.add(scoreLabel); 
         top.add(timeLabel); 
@@ -230,7 +240,13 @@ public class Game extends JFrame implements ActionListener{
         //if the clicked creature is alive kill it and call update score function 
         if(clickedCreature.getIsAlive()) {
             clickedCreature.kill();
-            update_score(); 
+            if(clickedCreature.getIndex() == currentIndex){
+                update_score(); 
+                currentIndex = rand.nextInt(10);
+                middle.setText(bioNames[currentIndex]);
+            }else{
+                minus_score();
+            }
         }
         
     }

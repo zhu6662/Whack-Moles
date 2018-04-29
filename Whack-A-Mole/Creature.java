@@ -44,12 +44,13 @@ public class Creature extends JButton{
             isAlive = true; //set creature as being alive  
             this.setBackground(Color.GREEN); 
             index = rand.nextInt(10);
+            this.setText(Game.animals[index]);
         }
         
         
     }
     
-    //Precondition: creature must be alive 
+    //Precondition: creature must be alive
     //set the creature as no longer being alive, change the background color back to being 
     //red, reset the life count, and decrement the game's creature alive count 
     public void kill() {
@@ -57,6 +58,11 @@ public class Creature extends JButton{
         this.setBackground(Color.RED); 
         life_count = 0; 
         Game.creaturesAlive--; 
+        this.setText(DEAD);
+    }
+    
+    public int getIndex(){
+        return index;
     }
     
     //if creature is alive increment its life_count and if the life count is equal to its max_life re_set it to being dead
