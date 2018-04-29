@@ -15,6 +15,8 @@ public class Creature extends JButton{
     
     private static final int MIN_LIFE = 50;  
     private static final int MAX_LIFE = 300;  
+    private static final String DEAD = "-------";
+    private int index; 
     static Random rand = new Random(); //declare Random statically so it does not have to be re-initiated for each use 
     
     private boolean isAlive; //shows whether creature is alive or not 
@@ -25,6 +27,7 @@ public class Creature extends JButton{
         isAlive = false; 
         this.setBackground(Color.RED);
         this.setOpaque(true); 
+        this.setText(DEAD);
         life_count = 0; 
         
     }
@@ -40,6 +43,7 @@ public class Creature extends JButton{
             final_life = MIN_LIFE + rand.nextInt(MAX_LIFE - MIN_LIFE + 1); //set final life 
             isAlive = true; //set creature as being alive  
             this.setBackground(Color.GREEN); 
+            index = rand.nextInt(10);
         }
         
         

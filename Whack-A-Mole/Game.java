@@ -15,6 +15,9 @@ import java.util.*;
 
 
 public class Game extends JFrame implements ActionListener{
+    public static String[] animals = {"Human","Wolf","Coyote", "Highland Cattle", "Dolphin", "Arctic Fox", "Tiger", "Rabbit", "King Cobra", "Dog"};
+    public static String[] bioNames = {"Homo Sapiens","Canis Rufus","Canius Latrans", "Bos Taurus", "Delphinus Delphis", "Alopex Lagopus", "Panthera Tigris","Oryctolagus cuniculus","Ophiophagus hannah","Canis Lupus Familiaris"};
+    
     private static final int MAX_CREATURES = 4; //stores the max number of active creatures 
     private static final String SCORE_PREFIX = "Score: "; 
     private static final String TIME_PREFIX = "Time: "; 
@@ -92,6 +95,7 @@ public class Game extends JFrame implements ActionListener{
     }
     
     public Game() {
+        
         //set JFrames size, layout, close operation, and title 
         setSize(500, 500); 
         setLayout(new BorderLayout()); 
