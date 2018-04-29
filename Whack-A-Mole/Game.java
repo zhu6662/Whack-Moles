@@ -18,11 +18,10 @@ public class Game extends JFrame implements ActionListener{
     private static final int MAX_CREATURES = 4; //stores the max number of active creatures 
     private static final String SCORE_PREFIX = "Score: "; 
     private static final String TIME_PREFIX = "Time: "; 
-    private static final double LENGTH_OF_GAME = .25*60000; //stores the length of the game in milliseconds
-    private static final int TARGET_SCORE = 1000; //stores the score the player must get to beat the level 
+    private static final double LENGTH_OF_GAME = .25*40000; //stores the length of the game in milliseconds
+    private static final int TARGET_SCORE = 250; //stores the score the player must get to beat the level 
     private static Random rand = new Random(); 
-    private static  int numOfCreatures = 9; //stores the number of creatures, varies with the level the player is currently on  
-    private static int level = 1; //stores the level the player is currently on  
+    private static  int numOfCreatures = 9; //stores the number of creatures, varies with the level the player is currently on 
     static int score; //store the numerical score of the game 
     static JLabel scoreLabel; //displays the score of the game
     static JLabel timeLabel; //displays the time left in the game
@@ -36,35 +35,23 @@ public class Game extends JFrame implements ActionListener{
     public static void main(String[] args) {
         //create an instance of the game and display start message 
         Game this_game = new Game(); 
-        JOptionPane.showMessageDialog(this_game, "Instructions: Click on a green space to get 10 points.\n  Good luck.");
+        JOptionPane.showMessageDialog(this_game, "Instructions: Match the vocab word with the definition shown. \nEach match is worth 10 points.\n  Good luck.");
         
         //loop to enable the user the continuously replay the game, the loop ends when the player chooses to not replay the game at the end of the game
         while(true) {
             
-            //keep playing levels until the player does not reach target score or the last level is played 
-            while(score <= TARGET_SCORE) {
-                
-                //announce level number and number of creatures to warn player before timer starts 
-                JOptionPane.showMessageDialog(this_game, "Level " + level + "\n Number of Moles: " + numOfCreatures + "\n Press OK to begin level.");
-                
-                //play the level 
-                this_game.playGame(); 
-                
-                //if target score is not reached end the game 
-                if(score < TARGET_SCORE) {
-                    JOptionPane.showMessageDialog(this_game, "Level " + level + " Score: " + score + "\n Did not get to " + TARGET_SCORE + " points.  Game Over");
-                    break; 
-                }
-                
-                //increment appropriate values to prepare  for next level 
-                nextLevel();
-                
-                //if there are levels left to play then re-instantiate Game to reflect changes
-                if(score <= TARGET_SCORE) {
-                    this_game.dispose();
-                    this_game = new Game();
-                }    
+            
+            //announce level number and number of creatures to warn player before timer starts 
+            JOptionPane.showMessageDialog(this_game, "Time: 10 secs \nTarget Score: " + TARGET_SCORE   + "\n Press OK to begin.");
+            
+            //play the level 
+            this_game.playGame(); 
+            
+            //if target score is not reached end the game 
+            if(score < TARGET_SCORE) {
+                JOptionPane.showMessageDialog(this_game,  " Score: " + score + "\n Did not get to " + TARGET_SCORE + " points.  Game Over");
             }
+                
             
             //if player has beat the last level display success message 
             if(score > TARGET_SCORE)
@@ -86,6 +73,7 @@ public class Game extends JFrame implements ActionListener{
         
         //dispose of game hence ending the program 
         this_game.dispose(); 
+        System.exit(0);
         
         
     }
@@ -136,9 +124,14 @@ public class Game extends JFrame implements ActionListener{
         //Initialize creatures array 
         creatures = new Creature[numOfCreatures]; 
         for(int x = 0; x < creatures.length; x++) {
-            creatures[x] = new Creature();
-            creatures[x].addActionListener(this); 
-            field.add(creatures[x]);  
+            if(x == 4){
+                field.add(new JButton("asdf"));
+                creatures[x] = new Creature();
+            }else{
+                creatures[x] = new Creature();
+                creatures[x].addActionListener(this); 
+                field.add(creatures[x]);  
+            }
         }
         return field; 
         
@@ -149,7 +142,7 @@ public class Game extends JFrame implements ActionListener{
         
         //Initialize top JPanel 
         JPanel top = new JPanel(); 
-        top.setLayout(new GridLayout(1,3)); 
+        top.setLayout(new GridLayout(1,2)); 
         
         //Initialize and add score and time label to JPanel 
         scoreLabel = new JLabel(); 
@@ -157,7 +150,6 @@ public class Game extends JFrame implements ActionListener{
         scoreLabel.setText(SCORE_PREFIX);
         timeLabel.setText(TIME_PREFIX);
         top.add(scoreLabel); 
-        top.add(new JButton());
         top.add(timeLabel); 
         
         return top; 
@@ -227,19 +219,6 @@ public class Game extends JFrame implements ActionListener{
         }
     }
     
-    //updates the level and numOfCreatures value for the next level 
-    private static void nextLevel() {
-        //increment the level by one and set the number of creatures equal to the creatures per level number times the level the game is currently on 
-        level++; 
-    }
-    /*
-    //resets the level and numOfCreatures value to the way they were at the start of the game 
-    private static void resetLevel() {
-        //increment the level by one and set the number of creatures equal to the creatures per level number times the level the game is currently on 
-        level = 1; 
-        numOfCreatures = CREATURES_PER_LEVEL; 
-    }
-    */
     
     //if the player clicks a creature and it is alive kill it and add points to score
     public void actionPerformed(ActionEvent event) {
